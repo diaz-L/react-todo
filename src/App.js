@@ -1,25 +1,55 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import uuid from "uuid";
+import Header from "./components/Header";
+import SearchBar from "./components/SearchBar";
+import TodoList from "./components/TodoList";
 
 class App extends Component {
+  state = {
+    todos: [
+      {
+        id: uuid.v4(),
+        task: "Buy grocery",
+        completed: true
+      },
+      {
+        id: uuid.v4(),
+        task: "Purchase movie",
+        completed: false
+      },
+      {
+        id: uuid.v4(),
+        task: "Return book",
+        completed: false
+      }
+    ]
+  };
+
+  onDelete = id => {
+    this.setState({
+      todos: this.state.todos.filter(todo => todo.id !== id)
+    });
+  };
+
+  addTodo = task => {
+    let todo = {
+      id: uuid.v4(),
+      task,
+      completed: false
+    };
+    this.setState({
+      todos: [...this.state.todos, todo]
+    });
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="container">
+        <div className="row">
+          <Header />
+          <SearchBar onClick={this.addTodo} />
+          <TodoList todos={this.state.todos} onDelete={this.onDelete} />
+        </div>
       </div>
     );
   }
